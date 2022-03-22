@@ -56,7 +56,7 @@ func main() {
 	provider := krb5.NewAuthProvider(krbClient)
 
 	// pass the provider to mssql to override the default authentication mechanism
-	mssql.SetAuthProvider(provider)
+	mssql.SetIntegratedAuthenticationProvider(provider)
 
 	// connect to sql.
 	// when the connection is opened it will use the krb5 Auth Provider created above.

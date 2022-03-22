@@ -6,7 +6,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/denisenkom/go-mssqldb/auth"
+	"github.com/denisenkom/go-mssqldb/integratedauth"
 
 	"github.com/jcmturner/gokrb5/v8/client"
 	"github.com/jcmturner/gokrb5/v8/gssapi"
@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	_ auth.Provider = &AuthProvider{}
-	_ auth.Auth     = &krbAuth{}
+	_ integratedauth.Provider                = &AuthProvider{}
+	_ integratedauth.IntegratedAuthenticator = &krbAuth{}
 )
 
 // NewAuthProvider creates an instance of the Auth interface for kerberos authentication
@@ -33,7 +33,7 @@ type AuthProvider struct {
 }
 
 // GetAuth returns an instance of the mssql.Auth interface. That is then responsible for kerberos Service Provider Negotiation.
-func (a AuthProvider) GetAuth(user, _, service, _ string) (auth.Auth, bool) {
+func (a AuthProvider) GetIntegratedAuthenticator(user, _, service, _ string) (integratedauth.IntegratedAuthenticator, bool) {
 	// If we've got a user, assume SQL Authentication
 	if user != "" {
 		return nil, false

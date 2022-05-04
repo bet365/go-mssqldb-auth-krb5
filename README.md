@@ -1,6 +1,6 @@
 # go-mssqldb-auth-krb5
 
-This package provides an implementation of auth.Auth from https://github.com/denisenkom/go-mssqldb using the gokrb5/v8 package at https://github.com/jcmturner/gokrb5/
+This package provides an implementation of auth.Auth from https://github.com/microsoft/go-mssqldb using the gokrb5/v8 package at https://github.com/jcmturner/gokrb5/
 
 An example usage:
 
@@ -16,7 +16,7 @@ import (
 	"log"
 
 	krb5 "github.com/bet365/go-mssqldb-auth-krb5"
-	mssql "github.com/denisenkom/go-mssqldb"
+	mssql "github.com/microsoft/go-mssqldb"
 	"github.com/jcmturner/gokrb5/v8/client"
 	"github.com/jcmturner/gokrb5/v8/config"
 )

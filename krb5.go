@@ -6,7 +6,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/denisenkom/go-mssqldb/integratedauth"
+	"github.com/microsoft/go-mssqldb/integratedauth"
 
 	"github.com/jcmturner/gokrb5/v8/client"
 	"github.com/jcmturner/gokrb5/v8/gssapi"

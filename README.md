@@ -1,6 +1,53 @@
 # go-mssqldb-auth-krb5
 
-This package provides an implementation of auth.Auth from https://github.com/microsoft/go-mssqldb using the gokrb5/v8 package at https://github.com/jcmturner/gokrb5/
+A pure go kerberos authentication provider package for https://github.com/microsoft/go-mssqldb using the gokrb5/v8 package at https://github.com/jcmturner/gokrb5/
+
+In order to use the package, import it alongside the main driver 
+
+``` golang
+	_ "github.com/bet365/go-mssqldb-auth-krb5"
+	_ "github.com/microsoft/go-mssqldb"
+```
+
+It will register itself and become available for use when the connection string parameter "authenticator=krb5" is used.
+
+e.g.
+
+    authenticator=krb5;server=DatabaseServerName;database=DBName;krb5-params.....
+
+The package supports authentication via 3 methods.
+
+* Keytabs - Specify the username, keytab file, the krb5.conf file, and realm.
+  
+      authenticator=krb5;server=DatabaseServerName;database=DBName;user id=MyUserName;krb5-realm=domain.com;krb5-configfile=/etc/krb5.conf;krb5-keytabfile=~/MyUserName.keytab
+  
+* Credential Cache - Specify the krb5.conf file path and credential cache file path.
+
+      authenticator=krb5;server=DatabaseServerName;database=DBName;krb5-configfile=/etc/krb5.conf;krb5-keytabcachefile=~/MyUserNameCachedCreds
+
+* Raw credentials - Specity krb5.confg, Username, Password and Realm. 
+  
+      authenticator=krb5;server=DatabaseServerName;database=DBName;user id=MyUserName;password=MyPassword;krb5-realm=comani.com;krb5-configfile=/etc/krb5.conf;
+
+The parameter names themselves are as follows :
+
+`krb5-configfile`  
+path to krb5 configuration file. e.g. /etc/krb5.conf
+
+`krb5-keytabfile`  
+path to keytab file.
+
+`krb5-keytabcachefile`  
+path to credential cache file.
+
+`krb5-realm`  
+domain name for account.
+
+`krb5-dnslookupkdc`  
+Optional parameter in all contexts. Set to lookup KDCs in DNS. Boolean. Default is true.
+
+`krb5-udppreferencelimit`  
+Optional parameter in all contexts. 1 means to always use tcp. MIT krb5 has a default value of 1465, and it prevents user setting more than 32700. Integer. Default is 1.
 
 An example usage:
 
@@ -12,53 +59,20 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
-
-	krb5 "github.com/bet365/go-mssqldb-auth-krb5"
-	mssql "github.com/microsoft/go-mssqldb"
-	"github.com/jcmturner/gokrb5/v8/client"
-	"github.com/jcmturner/gokrb5/v8/config"
+	
+	_ "github.com/bet365/go-mssqldb-auth-krb5"
+	_ "github.com/microsoft/go-mssqldb"	
 )
 
 func main() {
-
 	var (
-		username         string
-		password         string
-		realm            string
-		configFile       string
 		connectionString string
 	)
 
-	flag.StringVar(&username, "username", "", "Username")
-	flag.StringVar(&password, "password", "", "Password")
-	flag.StringVar(&realm, "realm", "", "Realm")
-	flag.StringVar(&configFile, "krb5-config", "", "Path to krb5.conf")
 	flag.StringVar(&connectionString, "connString", "", "Connection string")
-
 	flag.Parse()
 
-	data, err := ioutil.ReadFile(configFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Login using our credentials via gokrb5, returning a client
-	krbClient, err := LoginUsername(username, password, realm, string(data))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer krbClient.Destroy()
-
-	// create a new auth.Provider around the kerberos client
-	provider := krb5.NewAuthProvider(krbClient)
-
-	// pass the provider to mssql to override the default authentication mechanism
-	mssql.SetIntegratedAuthenticationProvider(provider)
-
-	// connect to sql.
 	// when the connection is opened it will use the krb5 Auth Provider created above.
 	db, err := sql.Open("sqlserver", connectionString)
 	if err != nil {
@@ -72,33 +86,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var value int
-	err = db.QueryRowContext(ctx, "select 1234").Scan(&value)
+	sql := "select 1234"
 
+	var value string
+	err = db.QueryRowContext(ctx, sql).Scan(&value)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println(value)
-}
-
-func LoginUsername(userName, password, realm, configString string) (*client.Client, error) {
-
-	cfg, err := config.NewFromString(configString)
-	if err != nil {
-		return nil, err
-	}
-
-	// configure as needed
-	cfg.LibDefaults.DNSLookupKDC = true
-	cfg.LibDefaults.UDPPreferenceLimit = 1
-
-	krbClient := client.NewWithPassword(userName, realm, password, cfg, client.DisablePAFXFAST(true))
-
-	if err := krbClient.Login(); err != nil {
-		return nil, err
-	}
-
-	return krbClient, nil
 }
 ```

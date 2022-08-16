@@ -1,10 +1,8 @@
 github.com/Azure/azure-sdk-for-go/sdk/azcore v0.19.0/go.mod h1:h6H6c8enJmmocHUbLiiGY6sx7f9i+X3m1CHdd5c6Rdw=
 github.com/Azure/azure-sdk-for-go/sdk/azidentity v0.11.0/go.mod h1:HcM1YX14R7CJcghJGOYCgdezslRSVzqwLf/q+4Y2r/0=
 github.com/Azure/azure-sdk-for-go/sdk/internal v0.7.0/go.mod h1:yqy467j36fJxcRV2TzfVZ1pCb5vxm4BtZPUdYWe/Xo8=
-github.com/bet365/go-mssqldb v0.12.1-0.20220322133645-279444b5898e h1:7IWXZTZZw878Tm2Ajj/qHMp1zMfzWn5ybk4t9KINHYk=
-github.com/bet365/go-mssqldb v0.12.1-0.20220322133645-279444b5898e/go.mod h1:iiK0YP1ZeepvmBQk/QpLEhhTNJgfzrpArPY/aFvc9yU=
-github.com/bet365/go-mssqldb v0.12.1-0.20220504095036-c8e8ecdd9d38 h1:ATxp+CP0mzpk3FqspL7zPQ+pgisgiuixSqpnQVsDEFU=
-github.com/bet365/go-mssqldb v0.12.1-0.20220504095036-c8e8ecdd9d38/go.mod h1:JWsC4ToRBruAAoknz9wV9Iiqb/K85J4zabR6PnBNbro=
+github.com/bet365/go-mssqldb v0.12.1-0.20220816164333-86ae3f6abb64 h1:hxtZsCJcFnSDzAlUkYWqPbMQyP42CLBmXL+lPNS1Hkc=
+github.com/bet365/go-mssqldb v0.12.1-0.20220816164333-86ae3f6abb64/go.mod h1:JWsC4ToRBruAAoknz9wV9Iiqb/K85J4zabR6PnBNbro=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
